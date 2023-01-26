@@ -4,7 +4,7 @@
 
 
 {% block body %}
-<h1 class="m-5">Découvrez nos terrains</h1>
+<h1 class="m-5">Découverte des terrains</h1>
     {% if not terrains.items is same as ([]) %}
         <main class="container">
             <div class="row">
@@ -19,13 +19,18 @@
                             <p class="card-text">{{ terrain.description | capitalize }}</p>
                         </div>
                         <hr>
-                        <div>
-                            <h6>En réservant le terrain nous mettons gratuitement à votre disposition:</h6>
-                            <ul>
-                                {%  for disposition in terrain.disposition %}
-                                    <li>{{ disposition|capitalize }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="row">
+                            <div class="col-8 col-lg-12">
+                                <h6>En réservant le terrain nous mettons gratuitement à votre disposition:</h6>
+                                <ul>
+                                    {%  for disposition in terrain.disposition %}
+                                        <li>{{ disposition|capitalize }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="col-4 col-lg-12 mt-lg-3">
+                                <a href="" class="btn btn-success">Réserver le terrain</a>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
