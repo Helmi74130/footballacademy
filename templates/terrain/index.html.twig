@@ -2,6 +2,38 @@
 
 {% block title %}Nos Terrains{% endblock %}
 
-{% block body %}
 
+{% block body %}
+<h1 class="m-5">Découvrez nos terrains</h1>
+    {% if not terrains.items is same as ([]) %}
+        <main class="container">
+            <div class="row">
+                {% for terrain in terrains %}
+                    <div class="col-12 col-lg-8 card p-0">
+                        <img class="card-img-top" src="{{ vich_uploader_asset(terrain, 'imageFile') }}" alt="Image du terrain de foot">
+                    </div>
+                    <div class="col-12 col-lg-4 mb-3 ">
+                        <div class="card-body">
+                            <h5 class="card-title fs-3 mt-lg-2">Terrain: {{ terrain.name | capitalize }}</h5>
+                            <p class="card-text text-end text-lg-start fs-5 mt-lg-3"><small class="text-muted"><b>Lieux:</b> {{ terrain.locate | capitalize }}</small></p>
+                            <p class="card-text">{{ terrain.description | capitalize }}</p>
+                        </div>
+                        <hr>
+                        <div>
+                            <h6>En réservant le terrain nous mettons gratuitement à votre disposition:</h6>
+                            <ul>
+                                {%  for disposition in terrain.disposition %}
+                                    <li>{{ disposition|capitalize }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </main>
+
+        <div class="text-center " >
+            {{ knp_pagination_render(terrains) }}
+        </div>
+    {% endif %}
 {% endblock %}

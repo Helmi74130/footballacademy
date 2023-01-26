@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Dispositions;
 use App\Entity\Players;
 use App\Entity\Terrain;
 use App\Entity\Time;
@@ -38,7 +39,14 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Horaires', 'fa-regular fa-clock', Time::class);
         yield MenuItem::section('Joueurs')->setCssClass('fs-5 font-weight-bold');
         yield MenuItem::linkToCrud('Joueurs', 'fa-solid fa-users-line', Players::class);
+        yield MenuItem::section('Mise à dispositions')->setCssClass('fs-5 font-weight-bold');
+        yield MenuItem::linkToCrud('Disponibilités', 'fa-solid fa-users-line', Dispositions::class);
+        yield MenuItem::section('Sites')->setCssClass('fs-5 font-weight-bold');
+        yield MenuItem::subMenu('Pages', 'fa-solid fa-laptop')->setSubItems([
+            MenuItem::linkToRoute('Accueil', 'fa-solid fa-house-laptop', 'app_home'),
+            MenuItem::linkToRoute('Terrains', 'fa-solid fa-futbol', 'app_terrain'),
+        ]);
 
-        //yield MenuItem::linkToLogout('Déconnexion', 'fa fa-exit')->setCssClass('fs-4 btn btn-warning mt-5');
+        yield MenuItem::linkToLogout('Déconnexion', 'fa-solid fa-door-open')->setCssClass('btn btn-outline-danger mt-5');
     }
 }
