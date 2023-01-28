@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réservation en cours!{% endblock %}
+
+{% block body %}
+<h1>Réservations</h1>
+
+    {% for reservation in reservations %}
+    <p>{{ reservation.date |date("m/d/Y") }}</p>
+        <p>{{ reservation.hour |date('H:i:s') }}</p>
+    {{ dump(reservation) }}
+    {% endfor %}
+{% endblock %}

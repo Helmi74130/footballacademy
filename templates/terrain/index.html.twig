@@ -33,6 +33,10 @@
                             </div>
                         </div>
                     </div>
+                    {#{%  for reservation in terrain.reservation %}
+                        <li>{{ reservation|date('d-m-Y') }}</li>
+                    {% endfor %}#}
+    {{ dump(terrain.reservation) }}
                 {% endfor %}
             </div>
         </main>
