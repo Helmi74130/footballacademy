@@ -22,6 +22,12 @@ class Time
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $hour = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $startplay = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $endplay = null;
+
     #[ORM\ManyToOne(inversedBy: 'reservation')]
     private ?User $user = null;
 
@@ -30,6 +36,8 @@ class Time
 
     #[ORM\OneToMany(mappedBy: 'time', targetEntity: Players::class)]
     private Collection $player;
+
+
 
     public function __construct()
     {
@@ -116,6 +124,30 @@ class Time
     public function setHour(\DateTimeInterface $hour): self
     {
         $this->hour = $hour;
+
+        return $this;
+    }
+
+    public function getStartplay(): ?\DateTimeInterface
+    {
+        return $this->startplay;
+    }
+
+    public function setStartplay(\DateTimeInterface $startplay): self
+    {
+        $this->startplay = $startplay;
+
+        return $this;
+    }
+
+    public function getEndplay(): ?\DateTimeInterface
+    {
+        return $this->endplay;
+    }
+
+    public function setEndplay(\DateTimeInterface $endplay): self
+    {
+        $this->endplay = $endplay;
 
         return $this;
     }

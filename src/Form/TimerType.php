@@ -15,12 +15,16 @@ class TimerType extends AbstractType
     {
         $builder
             ->add('date', DateType::class,[
-                'label'=> 'Jour de réservation souhaité *'
+                'label'=> 'Jour de réservation souhaité *',
+                'widget' => 'single_text',
+                'input' => 'datetime_immutable',
+                'html5' => false,
+                'attr' => ['class' => 'js-datepicker form-control'],
             ])
             ->add('hour',TimeType::class , [
                 'label'=> 'Heure de réservation souhaité *',
                 'input' => 'datetime',
-                'widget' => 'choice',
+                /*'widget' => 'choice',
                 'hours'=> [
                   8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
                 ],
@@ -29,7 +33,12 @@ class TimerType extends AbstractType
                 ],
                 'placeholder' => [
                     'hour' => 'Heures', 'minute' => 'Minutes',
-                ],
+                ],*/
+
+                'html5' => false,
+                'widget' => 'single_text',
+                // adds a class that can be selected in JavaScript
+                'attr' => ['class' => 'timepicker form-control'],
             ])
             /*->add('user')*/
             ->add('terrain')
