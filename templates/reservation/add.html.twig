@@ -105,11 +105,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.fr.min.js"></script>
     <script>
 
         $(document).ready(function() {
             let existingReservations = {{ existingReservations|json_encode|raw }};
-
 
             $('.js-datepicker').datepicker({
                 format: 'yyyy-mm-dd ',
@@ -124,36 +125,61 @@
             }).on("changeDate", function(e) {
                 let selectedDate = $(this).datepicker("getDate");
                 let year = selectedDate.getFullYear();
-                let month = selectedDate.getMonth() + 1; // getMonth() returns a 0-based index
+                let month = selectedDate.getMonth() + 1;
                 let day = selectedDate.getDate();
                 let userChoiceDate = year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
-                console.log(userChoiceDate)
 
-                $('.timepicker').timepicker({
-                    timeFormat: 'H:i',
-                    interval: 30,
-                    minTime: '8:00',
-                    maxTime: '23:00',
-                    startTime: '08:00',
-                    dynamic: false,
-                    dropdown: true,
-                    scrollbar: true,
-                    disableTimeRanges: existingReservations.map(function(reservation) {
+                $('.timepicker').timepicker('remove')
 
-                        let startReservationDate = new Date(reservation.start.date);
-                        let startHours = startReservationDate.getHours();
-                        let startMinutes = startReservationDate.getMinutes();
-                        let startTime = startHours + ':' + (startMinutes < 10 ? '0' + startMinutes : startMinutes);
+                    $('.timepicker').timepicker({
+                        timeFormat: 'H:i',
+                        interval: 30,
+                        minTime: '8:00',
+                        maxTime: '23:00',
+                        startTime: '08:00',
+                        dynamic: false,
+                        dropdown: true,
+                        scrollbar: true,
+                        disableTimeRanges: existingReservations.map(function(reservation) {
+                            //On récupere les données du tableau existingReservations et on transforme les données en datetime pour récupérer les valeurs souhaitées,
+                            // ensuite on concatene les valeurs
+                            let startReservationDate = new Date(reservation.start.date);
+                            //Date des jours de réservation
+                            let yearReservationDate = startReservationDate.getFullYear();
+                            let monthReservationDate = startReservationDate.getMonth() + 1; // getMonth() returns a 0-based index
+                            let dayReservationDate = startReservationDate.getDate();
+                            let dateReservationOnly = yearReservationDate + '-' + (monthReservationDate < 10 ? '0' + monthReservationDate : monthReservationDate) + '-' + (dayReservationDate < 10 ? '0' + dayReservationDate : dayReservationDate);
 
-                        let endReservationDate = new Date(reservation.end.date);
-                        let endHours = endReservationDate.getHours();
-                        let endMinutes = endReservationDate.getMinutes();
-                        let endTime = endHours + ':' + (endMinutes < 10 ? '0' + endMinutes : endMinutes);
-                        return [startTime, endTime];
-                    }),
+                            let dateArraysStart = []
+                            dateArraysStart.push(reservation.start.date)
 
-                });
+                            let dateArraysEnd = []
+                            dateArraysEnd.push(reservation.end.date)
 
+                            let piou = []
+                            piou.push(dateReservationOnly)
+
+                            let tableautrie = piou.filter(value => value === userChoiceDate)
+
+                            if (userChoiceDate === tableautrie.toString()){
+
+                                //Heures et minutes du début
+                                let hoursOfDayReservations = dateArraysStart.filter(dateArray => dateArray.slice(0,10) === userChoiceDate)
+                                /*let startHourOfTheDay = hoursOfDayReservations.map(x=>x.slice(11,16)).toString()*/
+                                let minutes =  hoursOfDayReservations.map(x=>x.slice(14,16)).toString()
+                                let startHourOfTheDay = hoursOfDayReservations.map(x=>x.slice(11,16))
+                                let heureModify = startHourOfTheDay.map(value=> value.slice(0,2) - 1).toString()
+
+                                // Heure et minute de fin
+                                let endHoursOfDayReservations = dateArraysEnd.filter(dateArray => dateArray.slice(0,10) === userChoiceDate)
+                                let endTimeOfTheDay = endHoursOfDayReservations.map(x=>x.slice(11,16) ).toString()
+
+                                return [heureModify + minutes, endTimeOfTheDay];
+                            }else {
+                                return ['', ''];
+                            }
+                        }),
+                    });
             });
         });
 
